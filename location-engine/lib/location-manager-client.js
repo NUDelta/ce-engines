@@ -4,7 +4,7 @@ LocationManagerClient = class LocationManagerClient {
         this._others = {};
     }
 
-    trackUpdates(tracker = Tracker, addTransform, changeCallback, removeCallback) {
+    trackUpdates(tracker, addTransform, changeCallback, removeCallback) {
         tracker.autorun(() => {
             let uid = Meteor.userId(),
                 latLng = Geolocation.latLng();
@@ -19,17 +19,12 @@ LocationManagerClient = class LocationManagerClient {
     }
 
     // FIXME: These default arguments don't make any sense
-    trackOthersUpdates(query = {}, addTransform, changeCallback, removeCallback) {
+    trackOthersUpdates(query, addTransform, changeCallback, removeCallback) {
         this.othersLocations(query).forEach((location) => {
             this._others[location._id] = addTransform(location);
             changeCallback(this._others[location._id], location);
         });
         Locations.find(query).observeChanges({
-            added: function(id, fields) {
-                // TODO: figure out we can apply a Mongo-style query to a
-                // javascript dictionary
-                // http://stackoverflow.com/questions/34060239/check-mongo-style-query-with-javascript-hashmap
-            },
             changed: function(id, fields) {
                 if (id in this._others) {
                     removeCallback(this._others[id]);
