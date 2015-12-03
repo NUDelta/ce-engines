@@ -16,9 +16,25 @@ if (Meteor.isClient) {
   });
 
   Template.map.onCreated(function() {
-    LocationManager.trackUpdates(this);
     GoogleMaps.ready('map', (map) => {
 
+      function renderMarker(location) {
+        return new google.maps.Marker({
+          position: new google.maps.LatLng(location.lat, location.lng),
+          map: map.instance
+        });
+      }
+
+      function changeMarker(marker, location) {
+        marker.setPosition(new google.maps.LatLng(location.lat, location.lng));
+      }
+
+      function removeMarker(marker) {
+        marker.setMap(null);
+      }
+
+      LocationManager.trackUpdates(this, renderMarker, changeMarker);
+      LocationManager.trackOthersUpdates({}, renderMarker, changeMarker, removeMarker);
     });
   });
 }

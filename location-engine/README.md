@@ -20,8 +20,8 @@ Other usages:
 
 ```js
 // gets current user location
-LocationManager.getUserLocation();
+LocationManager.currentLocation();
 // gets all other anonymized locations with with latitudes between -40 and 0
-LocationManager.getOtherUserLocations({ lat: { $gt: -40, $lt: 0 }});
+LocationManager.othersLocations({ lat: { $gt: -40, $lt: 0 }});
 ```
-`LocationManager.getOtherUserLocations` is disabled by default. You will have to configure the `Locations` collection permissions to enable it.
+`LocationManager.othersLocations` is disabled by default. You will have to configure the `Locations` collection permissions to enable it.
