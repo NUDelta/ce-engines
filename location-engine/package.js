@@ -13,15 +13,18 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
 
-  api.use(['ecmascript', 'mongo']);
+  api.use(['ecmascript', 'mongo', 'accounts-base']);
   api.use('aldeed:collection2');
-  api.use('mdg:geolocation', 'client');
+  api.use('mdg:geolocation', 'client'); // TODO: consider decoupling this dependency hahah
+
+  api.export('Locations');
+  api.export('LocationManager');
+  api.export('LocationManagerClient');
 
   api.addFiles('lib/locations.js');
   api.addFiles('lib/location-manager-client.js', 'client');
 
-  api.export('Locations');
-  api.export('LocationManager');
+  api.addFiles('lib/global-location-manager-client.js', 'client');
 });
 
 Package.onTest(function(api) {

@@ -1,18 +1,25 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+  Meteor.startup(() => {
+    GoogleMaps.load();
+  });
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+  Template.map.helpers({
+    mapOptions: () => {
+      let latLng = LocationManager.currentLocation();
+      if (GoogleMaps.loaded() && latLng) {
+        return {
+          center: new google.maps.LatLng(latLng.lat, latLng.lng),
+          zoom: 17
+        };
+      }
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
+  Template.map.onCreated(function() {
+    LocationManager.trackUpdates(this);
+    GoogleMaps.ready('map', (map) => {
+
+    });
   });
 }
 

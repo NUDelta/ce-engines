@@ -1,7 +1,3 @@
-LocationManager = {
-
-};
-
 Locations = new Mongo.Collection('locations');
 
 Locations.allow({
