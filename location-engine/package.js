@@ -2,9 +2,9 @@ Package.describe({
   name: 'aspin:location-engine',
   version: '0.0.1',
   // Brief, one-line summary of the package.
-  summary: '',
+  summary: 'Simple multi-user location synchronization and querying.',
   // URL to the Git repository containing the source code for this package.
-  git: '',
+  git: 'https://github.com/NUDelta/ce-engines',
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
@@ -14,8 +14,8 @@ Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
 
   api.use(['ecmascript', 'mongo', 'accounts-base']);
-  api.use('aldeed:collection2');
-  api.use('mdg:geolocation', 'client'); // TODO: consider decoupling this dependency hahah
+  api.use('aldeed:collection2@2.5.0');
+  api.use('mdg:geolocation@1.1.0', 'client'); // TODO: consider decoupling this dependency hahah
 
   api.export('Locations');
   api.export('LocationManager');
