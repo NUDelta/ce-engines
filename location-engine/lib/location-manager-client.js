@@ -4,7 +4,7 @@ LocationManagerClient = class LocationManagerClient {
         this._others = {};
     }
 
-    trackUpdates(tracker, addTransform, changeCallback, removeCallback) {
+    trackUpdates(tracker, addTransform, changeCallback) {
         tracker.autorun(() => {
             let uid = Meteor.userId(),
                 latLng = Geolocation.latLng();
@@ -18,7 +18,6 @@ LocationManagerClient = class LocationManagerClient {
         });
     }
 
-    // FIXME: These default arguments don't make any sense
     trackOthersUpdates(query, addTransform, changeCallback, removeCallback) {
         this.othersLocations(query).forEach((location) => {
             this._others[location._id] = addTransform(location);
