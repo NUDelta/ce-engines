@@ -7,8 +7,12 @@ Meteor.methods({
 
 var queryTransform = function(obj) {
   var output = {};
-  output.$or = convertQueryObjects(obj.$any);
-  output.$and = convertQueryObjects(obj.$all);
+  if (obj.$any) {
+    output.$or = convertQueryObjects(obj.$any);
+  }
+  if (obj.$all) {
+    output.$and = convertQueryObjects(obj.$all);
+  }
   return output;
 };
 
