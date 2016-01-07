@@ -31,5 +31,7 @@ Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('tinytest');
   api.use('aspin:location-engine');
+
+  api.addFiles('tests/location-manager-client-tests.js', 'client');
   api.addFiles('tests/location-engine-tests.js');
 });
