@@ -22,3 +22,5 @@ aspin:location-engine
 tinytest
 mdg:geolocation
 dburles:google-maps
+accounts-ui
+accounts-password

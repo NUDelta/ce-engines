@@ -19,6 +19,7 @@ if (Meteor.isClient) {
     GoogleMaps.ready('map', (map) => {
 
       function renderMarker(location) {
+        console.log(`new marker added! at ${location}`);
         return new google.maps.Marker({
           position: new google.maps.LatLng(location.lat, location.lng),
           map: map.instance
@@ -30,6 +31,7 @@ if (Meteor.isClient) {
       }
 
       function removeMarker(marker) {
+        console.log(`marker removed`);
         marker.setMap(null);
       }
 

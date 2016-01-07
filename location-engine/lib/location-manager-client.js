@@ -2,6 +2,7 @@ LocationManagerClient = class LocationManagerClient {
     constructor() {
         this._current = {};
         this._others = {};
+        this._locationId = null;
     }
 
     trackUpdates(tracker, addTransform, changeCallback) {
@@ -9,7 +10,18 @@ LocationManagerClient = class LocationManagerClient {
             let uid = Meteor.userId(),
                 latLng = Geolocation.latLng();
             if (uid) {
-                Locations.update({ uid: uid }, { $set: latLng });
+                if (this._locationId) {
+                    Locations.update(this._locationId, { $set: latLng });
+                } else {
+                    let prevLocation = Locations.findOne({ uid: uid });
+                    if (prevLocation) {
+                        this._locationId = prevLocation._id;
+                        Locations.update(this._locationId, { $set: latLng });
+                    } else {
+                        latLng.uid = uid;
+                        this._locationId = Locations.insert(latLng);
+                    }
+                }
             }
             if (Object.keys(this._current).length === 0) {
                 this._current.struct = addTransform(latLng);
@@ -24,13 +36,13 @@ LocationManagerClient = class LocationManagerClient {
             changeCallback(this._others[location._id], location);
         });
         Locations.find(query).observeChanges({
-            changed: function(id, fields) {
+            changed: (id, fields) => {
                 if (id in this._others) {
                     removeCallback(this._others[id]);
                     changeCallback(this._others[id], fields);
                 }
             },
-            removed: function(id) {
+            removed: (id) => {
                 if (id in this._others) {
                     removeCallback(this._others[id]);
                     delete this._others[id];
