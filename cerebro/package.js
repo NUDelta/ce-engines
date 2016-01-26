@@ -12,14 +12,14 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use('ecmascript');
-  api.use('accounts-base');
-  api.addFiles('lib/cerebro.js', 'server');
+  api.use(['ecmascript', 'accounts-base']);
+  api.export('CerebroServer');
+  api.export('Cerebro');
+  api.addFiles(['lib/cerebro.js', 'lib/cerebro-server.js', 'lib/cerebro-server-exports.js'], 'server');
 });
 
 Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
+  api.use(['ecmascript', 'tinytest', 'underscore']);
   api.use('ryanmadden:cerebro');
-  api.addFiles('cerebro-tests.js');
+  api.addFiles('tests/cerebro-server-tests.js', 'server');
 });
