@@ -3,8 +3,15 @@ CerebroServer = class CerebroServer {
 
   }
 
-  query(userSet) {
+  liveQuery() {
 
+  }
+
+  query(userQuery) {
+    let result = {};
+    result.$or = this._queryTransform(userQuery.$any);
+    result.$and = this._queryTransform(userQuery.$and);
+    return Meteor.users.find(_.pick(result, arr => arr.length > 0));
   }
 
   _queryTransform(query) {
@@ -12,7 +19,7 @@ CerebroServer = class CerebroServer {
     for(let attribute in query) {
       let pair = {},
           attributeVal = query[attribute],
-          key = `profile.qualifications.${attribute};`,
+          key = `profile.qualifications.${attribute}`,
           value = (attributeVal.constructor === Array) ? { $in: attributeVal } : attributeVal;
       pair[key] = value;
       output.push(pair);
@@ -25,35 +32,3 @@ CerebroServer = class CerebroServer {
   }
 
 }
-
-// var queryTransform = function(obj) {
-//   var output = {};
-//   if (obj.$any) {
-//     output.$or = convertQueryObjects(obj.$any);
-//   }
-//   if (obj.$all) {
-//     output.$and = convertQueryObjects(obj.$all);
-//   }
-//   return output;
-// };
-//
-// var convertQueryObjects = function(obj) {
-//   var lst = [];
-//   var attributes = Object.keys(obj);
-//   for (var i = 0; i < attributes.length; i++) {
-//     var add = {};
-//     var name = "profile.qualifications" + attributes[i];
-//     add[name] = insertIn(obj[attributes[i]]);
-//     lst.push(add);
-//   }
-//   return lst;
-// }
-//
-// var insertIn = function(item) {
-//   if (item.constructor === Array) {
-//     return {$in: item};
-//   }
-//   else {
-//     return item;
-//   }
-// }
