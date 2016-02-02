@@ -57,3 +57,14 @@ Tinytest.add('Cerebro user characteristic complex query', (test) => {
   test.isNotUndefined(_.find(result, { username: 'kevin'}), 'could not find user kevin who works at Fitbit');
   test.isNotUndefined(_.find(result, { username: 'ryan'}), 'could not find user ryan who works at google and does not have a dog');
 });
+
+Tinytest.add('Cerebro yelp query works', (test) => {
+  let result = Cerebro._yelpQuery('restaurants');
+  test.equal(result.length, 5, 'wrong default result length');
+});
+
+Tinytest.add('Cerebro live query gets longitudes for now', (test) => {
+  let result = Cerebro.liveQuery('restaurants');
+  test.equal(result.length, 5, 'wrong default result length');
+  test.isNotUndefined(result[0].lat, 'first result has a latitude');
+});
