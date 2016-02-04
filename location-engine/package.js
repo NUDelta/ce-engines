@@ -1,6 +1,6 @@
 Package.describe({
   name: 'aspin:location-engine',
-  version: '0.0.4',
+  version: '0.0.5',
   summary: 'Simple multi-user location synchronization and querying.',
   git: 'https://github.com/NUDelta/ce-engines',
   documentation: 'README.md'
@@ -9,7 +9,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
 
-  api.use(['ecmascript', 'mongo', 'accounts-base', 'erasaur:meteor-lodash']);
+  api.use(['ecmascript', 'mongo', 'accounts-base', 'erasaur:meteor-lodash@0.1.0']);
   api.use('aldeed:collection2@2.5.0');
   api.use('mdg:geolocation@1.1.0', 'client'); // TODO: consider decoupling this dependency hahah
 
