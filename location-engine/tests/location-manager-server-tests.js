@@ -3,6 +3,21 @@ function isWithinRange(diff, range) {
   return Math.abs(diff) < range;
 }
 
+Tinytest.add('determines if location is within bounding box', (test) => {
+  let simpleBounds = {
+    lat: [40, 60],
+    lng: [40, 60]
+  };
+  test.isTrue(LocationManager._isWithinBounds({ lat: 50, lng: 50 }, simpleBounds), 'simplest aff case fails');
+  test.isFalse(LocationManager._isWithinBounds({ lat: 30, lng: 50 }, simpleBounds), 'simplest neg case fails');
+  let edgeBounds = {
+    lat: [70, 90],
+    lng: [170, -170]
+  };
+  test.isTrue(LocationManager._isWithinBounds({ lat: 80, lng: 179 }, edgeBounds), 'edge aff case fails');
+  test.isFalse(LocationManager._isWithinBounds({ lat: 80, lng: 10 }, edgeBounds), 'edge neg case fails');
+});
+
 Tinytest.add('converts degrees to radians', (test) => {
   let conversion = LocationManager._degreeToRadian(180);
   test.isTrue(isWithinRange(conversion - Math.PI, 0.05));

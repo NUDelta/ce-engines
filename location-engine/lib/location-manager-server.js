@@ -2,15 +2,41 @@ const earthRadius = 6371000;
 
 LocationManagerServer = class LocationManagerServer {
   constructor() {
-
+    this.range = 100;
   }
 
   findUsersNearLocation(location) {
-
+    // TODO: refactor this into a single query
+    let users = [],
+        bounds = this.computeBoundsAround(location, this.range);
+    Locations.find().forEach((userLocation) => {
+      if (this._isWithinBounds(userLocation, bounds)) {
+        users.push(userLocation.uid);
+      }
+    });
+    return users;
   }
 
   findUsersNearLocations(locations) {
+    // TODO: refactor this too
+    let users = [];
+    locations.forEach((location) => {
+      _.union(users, this.findUsersNearLocation(location));
+    });
+    return users;
+  }
 
+  _isWithinBounds(location, bounds) {
+    // edge cases, cross date line
+    let fitsLongitudeBox;
+    if (bounds.lng[1] > bounds.lng[0]) {
+      // normal
+      fitsLongitudeBox = location.lng >= bounds.lng[0] && location.lng <= bounds.lng[1];
+    } else {
+      fitsLongitudeBox = location.lng >= bounds.lng[0] || location.lng <= bounds.lng[1];
+    }
+    return location.lat >= bounds.lat[0] && location.lat <= bounds.lat[1] &&
+           fitsLongitudeBox;
   }
 
   computeDistance(location1, location2) {
