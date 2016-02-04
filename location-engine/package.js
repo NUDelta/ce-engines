@@ -9,7 +9,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
 
-  api.use(['ecmascript', 'mongo', 'accounts-base']);
+  api.use(['ecmascript', 'mongo', 'accounts-base', 'erasaur:meteor-lodash']);
   api.use('aldeed:collection2@2.5.0');
   api.use('mdg:geolocation@1.1.0', 'client'); // TODO: consider decoupling this dependency hahah
 
@@ -31,6 +31,8 @@ Package.onTest(function(api) {
   api.use('aspin:location-engine');
 
   api.addFiles('tests/location-manager-client-tests.js', 'client');
-  api.addFiles('tests/location-manager-server-tests.js', 'server');
+  api.addFiles(['tests/location-manager-server-fixtures.js',
+                'tests/location-manager-server-tests.js'],
+    'server');
   api.addFiles('tests/location-engine-tests.js');
 });

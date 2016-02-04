@@ -2,13 +2,13 @@ const earthRadius = 6371000;
 
 LocationManagerServer = class LocationManagerServer {
   constructor() {
-    this.range = 100;
+    this._debug = false;
   }
 
-  findUsersNearLocation(location) {
+  findUsersNearLocation(location, range=200) {
     // TODO: refactor this into a single query
     let users = [],
-        bounds = this.computeBoundsAround(location, this.range);
+        bounds = this.computeBoundsAround(location, range);
     Locations.find().forEach((userLocation) => {
       if (this._isWithinBounds(userLocation, bounds)) {
         users.push(userLocation.uid);
@@ -21,7 +21,7 @@ LocationManagerServer = class LocationManagerServer {
     // TODO: refactor this too
     let users = [];
     locations.forEach((location) => {
-      _.union(users, this.findUsersNearLocation(location));
+      users = _.union(users, this.findUsersNearLocation(location));
     });
     return users;
   }
@@ -29,14 +29,19 @@ LocationManagerServer = class LocationManagerServer {
   _isWithinBounds(location, bounds) {
     // edge cases, cross date line
     let fitsLongitudeBox;
-    if (bounds.lng[1] > bounds.lng[0]) {
+    if (bounds.lng[1] > bounds.lng[0] || Math.abs(bounds.lng[1]) > Math.abs(bounds.lng[0])) {
       // normal
-      fitsLongitudeBox = location.lng >= bounds.lng[0] && location.lng <= bounds.lng[1];
+      fitsLongitudeBox = this._isBetween(location.lng, bounds.lng[0], bounds.lng[1]);
     } else {
       fitsLongitudeBox = location.lng >= bounds.lng[0] || location.lng <= bounds.lng[1];
     }
-    return location.lat >= bounds.lat[0] && location.lat <= bounds.lat[1] &&
+    return this._isBetween(location.lat, bounds.lat[0], bounds.lat[1]) &&
            fitsLongitudeBox;
+  }
+
+  _isBetween(target, lim1, lim2) {
+    return target >= lim1 && target <= lim2 ||
+           target <= lim1 && target >= lim2;
   }
 
   computeDistance(location1, location2) {

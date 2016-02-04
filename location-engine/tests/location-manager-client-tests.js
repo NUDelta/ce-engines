@@ -37,6 +37,5 @@ Tinytest.addAsync('trackUpdates sets current according to the first argument', (
 Tinytest.add('trackUpdates should recall the second argument on reruns', (test) => {
   let currentTimesCalled = timesCalled;
   stubTracker.rerun();
-  console.log(timesCalled);
   test.equal(currentTimesCalled + 1, timesCalled);
 });

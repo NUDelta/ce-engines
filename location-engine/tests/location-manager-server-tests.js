@@ -10,12 +10,27 @@ Tinytest.add('determines if location is within bounding box', (test) => {
   };
   test.isTrue(LocationManager._isWithinBounds({ lat: 50, lng: 50 }, simpleBounds), 'simplest aff case fails');
   test.isFalse(LocationManager._isWithinBounds({ lat: 30, lng: 50 }, simpleBounds), 'simplest neg case fails');
+  let negativeBounds = {
+    lat: [-40, -60],
+    lng: [-40, -60]
+  };
+  test.isTrue(LocationManager._isWithinBounds({ lat: -50, lng: -50 }, negativeBounds), 'negative aff case fails');
+  test.isFalse(LocationManager._isWithinBounds({ lat: -30, lng: -50 }, negativeBounds), 'negative neg case fails');
   let edgeBounds = {
     lat: [70, 90],
     lng: [170, -170]
   };
   test.isTrue(LocationManager._isWithinBounds({ lat: 80, lng: 179 }, edgeBounds), 'edge aff case fails');
   test.isFalse(LocationManager._isWithinBounds({ lat: 80, lng: 10 }, edgeBounds), 'edge neg case fails');
+});
+
+Tinytest.add('in between function works properly', (test) => {
+  test.isTrue(LocationManager._isBetween(50, 0, 100));
+  test.isTrue(LocationManager._isBetween(50, 100, 0));
+  test.isTrue(LocationManager._isBetween(-50, -10, -100));
+  test.isTrue(LocationManager._isBetween(-50, 10, -100));
+  test.isFalse(LocationManager._isBetween(50, 10, -100));
+  test.isFalse(LocationManager._isBetween(50, 10, 20));
 });
 
 Tinytest.add('converts degrees to radians', (test) => {
@@ -110,4 +125,21 @@ Tinytest.add('bounds are computed properly', (test) => {
   let expectedMaxDistance = radius * Math.sqrt(2);
   test.isTrue(isWithinRange(expectedMaxDistance - distance, distance * 0.1),
     `computed bounds are too far: expected ${expectedMaxDistance}, got ${distance}`);
+});
+
+const TECH = { lat: 42.0578102, lng: -87.6780661 };
+const FOSTER_WALKER = { lat: 42.0537641, lng: -87.6786452 };
+Tinytest.add('appropriate users are selected from the location', (test) => {
+  let peopleNearTech = LocationManager.findUsersNearLocation(TECH);
+  test.isTrue(peopleNearTech.length == 2, `got wrong number of people; expected 2, got ${peopleNearTech.length}`);
+  test.isTrue(_.contains(peopleNearTech, 'kevin'), 'could not find kevin near tech');
+  test.isTrue(_.contains(peopleNearTech, 'ryan'), 'could not find ryan near tech');
+});
+
+Tinytest.add('appropriate users are selected from multiple locations', (test) => {
+  let expectedMatches = LocationManager.findUsersNearLocations([TECH, TECH, FOSTER_WALKER]);
+  test.isTrue(expectedMatches.length == 3, `got wrong number of people; expected 3, got ${expectedMatches.length}`);
+  test.isTrue(_.contains(expectedMatches, 'kevin'), 'could not find kevin in matches');
+  test.isTrue(_.contains(expectedMatches, 'ryan'), 'could not find ryan in matches');
+  test.isTrue(_.contains(expectedMatches, 'shannon'), 'could not find shannon in matches');
 });
