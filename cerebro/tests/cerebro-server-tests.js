@@ -63,7 +63,10 @@ Tinytest.add('Cerebro yelp query works', (test) => {
   test.equal(result.length, 5, 'wrong default result length');
 });
 
-Tinytest.add('Cerebro live query gets longitudes for now', (test) => {
-  let result = Cerebro.liveQuery('restaurants');
-  // TODO: write these tests :)
+Tinytest.add('Cerebro live query finds correct user', (test) => {
+  const PARK_EVANSTON = { lat: 42.047493, lng: -87.6818237 };
+  let result = Cerebro.liveQuery('restaurants', PARK_EVANSTON);
+  test.equal(result.length, 2, `wrong result length: expected 2, got ${result.length}`);
+  test.isTrue(_.contains(result, 'kevin'), 'expected to find kevin in result');
+  test.isTrue(_.contains(result, 'shannon'), 'expected to find shannon in result');
 });

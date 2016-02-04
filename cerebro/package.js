@@ -16,7 +16,7 @@ Package.onUse(function(api) {
 });
 
 Package.onTest(function(api) {
-  api.use(['ecmascript', 'accounts-password', 'tinytest', 'erasaur:meteor-lodash']);
+  api.use(['ecmascript', 'accounts-password', 'tinytest', 'erasaur:meteor-lodash', 'aspin:location-engine']);
   api.use('ryanmadden:cerebro');
   api.addFiles(['tests/fixtures.js', 'tests/cerebro-server-tests.js'], 'server');
 });

@@ -55,3 +55,19 @@ if (Meteor.users.find().count() === 0) {
     Accounts.createUser(user);
   }
 }
+
+Locations.find = function() {
+  return [{
+    uid: 'kevin',
+    lat: 42.047493, // near Park Evanston
+    lng: -87.6818237
+  }, {
+    uid: 'ryan',
+    lat: 42.055795, // north of tech
+    lng: -87.679485
+  }, {
+    uid: 'shannon',
+    lat: 42.0491099, // near Bat 17
+    lng: -87.6839757
+  }];
+};

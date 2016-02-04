@@ -11,15 +11,20 @@ CerebroServer = class CerebroServer {
 
   }
 
-  liveQuery(locationType) {
-    let locations = _.map(this._yelpQuery(locationType), business => business.location.coordinate);
+  liveQuery(locationType, options={}) {
+    options.location = options.location || 'Evanston+IL';
+    options.radius = options.radius || 200;
+    options.limit = options.limit || 20;
+
+    let locations = _.map(this._yelpQuery(locationType, options.location, options.radius, options.limit),
+                          business => business.location.coordinate);
     locations = _.map(locations, (location) => {
-      return {lat: location.latitude, lng: location.longitude}
+      return { lat: location.latitude, lng: location.longitude }
     });
     return LocationManager.findUsersNearLocations(locations);
   }
 
-  _yelpQuery(locationType, location='Evanston+IL', radius=20, limit=5) {
+  _yelpQuery(locationType, location='Evanston+IL', radius=200, limit=5) {
     // TODO: refactor this
     // TODO: add support for *any* location
     let params = _.clone(auth);
