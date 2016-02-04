@@ -31,3 +31,10 @@ LocationManager.currentLocation();
 LocationManager.othersLocations({ lat: { $gt: -40, $lt: 0 }});
 ```
 `LocationManager.othersLocations` is disabled by default. You will have to configure the `Locations` collection permissions to enable it.
+
+### Server-side
+TODO: update me!
+
+```js
+LocationManager.findUsersNearLocation({ lat: 42, lng: 42 });
+```

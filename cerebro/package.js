@@ -9,14 +9,14 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use(['ecmascript', 'accounts-base', 'accounts-password', 'accounts-oauth', 'oauth1',
-    'erasaur:meteor-lodash', 'aspin:location-engine']);
+    'erasaur:meteor-lodash@0.1.0', 'aspin:location-engine@0.0.5']);
   api.export('CerebroServer');
   api.export('Cerebro');
   api.addFiles(['lib/cerebro.js', 'lib/cerebro-server.js', 'lib/cerebro-server-exports.js'], 'server');
 });
 
 Package.onTest(function(api) {
-  api.use(['ecmascript', 'accounts-password', 'tinytest', 'erasaur:meteor-lodash']);
+  api.use(['ecmascript', 'accounts-password', 'tinytest', 'erasaur:meteor-lodash@0.1.0']);
   api.use('ryanmadden:cerebro');
   api.addFiles(['tests/fixtures.js', 'tests/cerebro-server-tests.js'], 'server');
 });

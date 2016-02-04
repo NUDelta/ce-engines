@@ -16,9 +16,7 @@ CerebroServer = class CerebroServer {
     locations = _.map(locations, (location) => {
       return {lat: location.latitude, lng: location.longitude}
     });
-    return locations;
-    // TODO: implement this below
-    //return LocationManager.findUsersNearLocations(locations);
+    return LocationManager.findUsersNearLocations(locations);
   }
 
   _yelpQuery(locationType, location='Evanston+IL', radius=20, limit=5) {

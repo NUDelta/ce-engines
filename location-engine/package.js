@@ -1,6 +1,6 @@
 Package.describe({
   name: 'aspin:location-engine',
-  version: '0.0.5',
+  version: '0.0.6',
   summary: 'Simple multi-user location synchronization and querying.',
   git: 'https://github.com/NUDelta/ce-engines',
   documentation: 'README.md'
