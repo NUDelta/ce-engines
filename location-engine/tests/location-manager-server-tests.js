@@ -1,3 +1,4 @@
+// TODO: refactor to be a percentage difference
 function isWithinRange(diff, range) {
   return Math.abs(diff) < range;
 }
@@ -20,13 +21,6 @@ Tinytest.add('calculates distance between two geocoordinates properly', (test) =
       computedDistance = LocationManager.computeDistance(location1, location2);
 
   test.isTrue(isWithinRange(computedDistance - actualDistance, 50), `distance too great: expected ${actualDistance}, got ${computedDistance}`);
-});
-
-Tinytest.add('computes bounding box around a location', (test) => {
-  let techInstitute = {
-    lat: 42.0564563,
-    lng: -87.7494751
-  }, radius = 1000;
 });
 
 Tinytest.add('latitude bounds are computed properly', (test) => {
@@ -84,4 +78,21 @@ Tinytest.add('longitude changes are wrapped properly', (test) => {
   test.equal(LocationManager._incLongitude(10, -20), -10, 'crossing Greenwich fails');
   test.equal(LocationManager._incLongitude(-170, -20), 170, 'crossing date line west to east fails');
   test.equal(LocationManager._incLongitude(-180, -20), 160, 'starting from date line west fails');
+});
+
+Tinytest.add('bounds are computed properly', (test) => {
+  const radius = 50;
+  let location = {
+    lat: 40,
+    lng: 50
+  }, bounds = LocationManager.computeBoundsAround(location, radius);
+
+  let corner = {
+    lat: bounds.lat[0],
+    lng: bounds.lng[0]
+  }, distance = LocationManager.computeDistance(corner, location);
+
+  let expectedMaxDistance = radius * Math.sqrt(2);
+  test.isTrue(isWithinRange(expectedMaxDistance - distance, distance * 0.1),
+    `computed bounds are too far: expected ${expectedMaxDistance}, got ${distance}`);
 });

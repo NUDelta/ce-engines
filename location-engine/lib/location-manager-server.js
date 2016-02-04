@@ -33,6 +33,10 @@ LocationManagerServer = class LocationManagerServer {
   }
 
   computeBoundsAround(location, radius) {
+    let bounds = {};
+    bounds.lat = this._computeLatBounds(location.lat, radius);
+    bounds.lng = this._computeLngBounds(location, radius);
+    return bounds;
   }
 
   _computeLatBounds(latitude, distance) {
