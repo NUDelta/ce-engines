@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ryanmadden:cerebro',
-  version: '0.0.2',
+  version: '0.0.3',
   summary: 'Facilitates querying of users based on user.profile fields',
   git: 'https://github.com/NUDelta/ce-engines',
   documentation: null
