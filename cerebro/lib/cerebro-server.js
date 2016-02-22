@@ -11,6 +11,19 @@ CerebroServer = class CerebroServer {
 
   }
 
+  sendNotifications(users, server, subject, text) {
+    // email only for now
+    server.unblock();
+    users.forEach((user) => {
+      Email.send({
+        to: user.emails[0].address,
+        from: 'shannonnachreiner2012@u.northwestern.edu',
+        subject: subject,
+        text: text
+      });
+    });
+  }
+
   liveQuery(locationType, options={}) {
     options.location = options.location || 'Evanston+IL';
     options.radius = options.radius || 200;
