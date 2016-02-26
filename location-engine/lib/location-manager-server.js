@@ -5,7 +5,7 @@ LocationManagerServer = class LocationManagerServer {
     this._debug = false;
   }
 
-  findUsersNearLocation(location, range=200) {
+  findUsersNearLocation(location, range = 200) {
     // TODO: refactor this into a single query
     let users = [],
         bounds = this.computeBoundsAround(location, range);
@@ -17,11 +17,11 @@ LocationManagerServer = class LocationManagerServer {
     return users;
   }
 
-  findUsersNearLocations(locations) {
+  findUsersNearLocations(locations, range = 200) {
     // TODO: refactor this too
     let users = [];
     locations.forEach((location) => {
-      users = _.union(users, this.findUsersNearLocation(location));
+      users = _.union(users, this.findUsersNearLocation(location, range));
     });
     return users;
   }

@@ -47,7 +47,7 @@ CerebroServer = class CerebroServer {
     // TODO: implement me
   }
 
-  liveQuery(locationType, options={}) {
+  liveQuery(locationType, options = {}) {
     options.location = options.location || 'Evanston+IL';
     options.radius = options.radius || 200;
     options.limit = options.limit || 20;
@@ -57,6 +57,11 @@ CerebroServer = class CerebroServer {
     locations = _.map(locations, (location) => {
       return { lat: location.latitude, lng: location.longitude }
     });
+    return LocationManager.findUsersNearLocations(locations);
+  }
+
+  pointsQuery(locations, options = {}) {
+    options.radius = options.radius || 200;
     return LocationManager.findUsersNearLocations(locations);
   }
 
