@@ -1,6 +1,6 @@
 CerebroClient = class CerebroClient {
   constructor() {
-    this._notifyMethod = this.EMAIL;
+    this.NOTIFY_METHOD = this.EMAIL;
   }
 
   // TODO: move this to CerebroCore and extend classes
@@ -8,8 +8,8 @@ CerebroClient = class CerebroClient {
     return 'EMAIL';
   }
 
-  static get PUSH_NOTIFICATION() {
-    return 'PUSH_NOTIFICATION';
+  static get PUSH() {
+    return 'PUSH';
   }
 
   notify(experienceId, subject, text) {
@@ -35,6 +35,13 @@ CerebroClient = class CerebroClient {
   }
 
   setNotificationMethod(method) {
-    this._notifyMethod = method;
+    this.NOTIFY_METHOD = method;
+    Meteor.call('setNotificaitonMethod', method, (error, result) => {
+      if (error) {
+        console.log('error', error);
+      } else {
+
+      }
+    });
   }
 };

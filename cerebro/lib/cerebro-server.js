@@ -8,11 +8,30 @@ let auth = {
 
 CerebroServer = class CerebroServer {
   constructor() {
-
+    this.NOTIFY_ALL = false;
+    this.NOTIFY_METHOD = this.EMAIL;
   }
 
-  sendNotifications(users, server, subject, text) {
-    // email only for now
+  static get EMAIL() {
+    return 'EMAIL';
+  }
+
+  static get PUSH() {
+    return 'PUSH';
+  }
+
+  notify(users, server, subject, text) {
+    switch(this.NOTIFY_METHOD) {
+      case this.EMAIL:
+        this._sendEmails(users, server, subject, text);
+        break;
+      default:
+        console.log('[CEREBRO-SERVER] Invalid notification method was set.');
+        break;
+    }
+  }
+
+  _sendEmails(users, server, subject, text) {
     server.unblock();
     users.forEach((user) => {
       Email.send({
@@ -22,6 +41,10 @@ CerebroServer = class CerebroServer {
         text: text
       });
     });
+  }
+
+  _sendPush(users, servers, subject, text) {
+    // TODO: implement me
   }
 
   liveQuery(locationType, options={}) {
@@ -84,10 +107,6 @@ CerebroServer = class CerebroServer {
       output.push(pair);
     }
     return output;
-  }
-
-  notify(userSet) {
-
   }
 
 }

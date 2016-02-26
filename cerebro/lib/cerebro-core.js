@@ -1,5 +1,8 @@
 if (Meteor.isServer) {
   Meteor.methods({
+    setNotificationMethod: function(method) {
+      Cerebro.NOTIFY_METHOD = method;
+    },
     notify: function(experienceId, subject, text) {
       // TODO: refactor these together
       let experience = Experiences.findOne(experienceId);
@@ -7,9 +10,14 @@ if (Meteor.isServer) {
         query = {
           'profile.subscriptions': experienceId,
           _id: { $in: atLocation }
-        },
-        users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
-      Cerebro.sendNotifications(users, this, subject, text);
+        };
+
+      if (Cerebro.NOTIFY_ALL) {
+        delete query.profile;
+      }
+      let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
+
+      Cerebro.notify(users, this, subject, text);
     },
     scheduleNotifications: function(experienceId, subject, schedule) {
       let n = 0,
@@ -40,10 +48,14 @@ if (Meteor.isServer) {
               query = {
                 'profile.subscriptions': experienceId,
                 _id: { $in: newlyAtLocation }
-              },
-              newUsers = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
+              };
 
-          Cerebro.sendNotifications(newUsers, server, subject, experience.startEmailText);
+          if (Cerebro.NOTIFY_ALL) {
+            delete query.profile;
+          }
+
+          let newUsers = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
+          Cerebro.notify(newUsers, server, subject, experience.startEmailText);
           newUsers.forEach((user) => {
             usersReached.push(user._id);
           });
