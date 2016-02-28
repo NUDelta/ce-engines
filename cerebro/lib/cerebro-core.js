@@ -55,7 +55,7 @@ if (Meteor.isServer) {
           }
 
           let newUsers = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
-          Cerebro.notify(newUsers, server, subject, experience.startEmailText);
+          Cerebro.notify(newUsers, server, subject, experience.participationText);
           newUsers.forEach((user) => {
             usersReached.push(user._id);
           });

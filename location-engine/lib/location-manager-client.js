@@ -9,7 +9,7 @@ LocationManagerClient = class LocationManagerClient {
     tracker.autorun(() => {
       let uid = Meteor.userId(),
         latLng = Geolocation.latLng();
-      if (uid) {
+      if (uid && latLng) {
         if (this._locationId) {
           Locations.update(this._locationId, { $set: latLng });
         } else {

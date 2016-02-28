@@ -1,6 +1,6 @@
 Package.describe({
-  name: 'ryanmadden:cerebro',
-  version: '0.0.3',
+  name: 'collectiveexperiences:cerebro',
+  version: '0.0.1',
   summary: 'Facilitates querying of users based on user.profile fields',
   git: 'https://github.com/NUDelta/ce-engines',
   documentation: null
@@ -20,7 +20,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use(['ecmascript', 'accounts-password', 'tinytest', 'erasaur:meteor-lodash', 'aspin:location-engine']);
-  api.use('ryanmadden:cerebro');
+  api.use('collectiveexperiences:cerebro');
   api.addFiles(['tests/fixtures.js', 'tests/cerebro-client-tests.js'], 'client');
   api.addFiles(['tests/fixtures.js', 'tests/cerebro-server-tests.js'], 'server');
 });

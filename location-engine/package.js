@@ -1,6 +1,6 @@
 Package.describe({
-  name: 'aspin:location-engine',
-  version: '0.0.6',
+  name: 'collectiveexperiences:location-engine',
+  version: '0.0.1',
   summary: 'Simple multi-user location synchronization and querying.',
   git: 'https://github.com/NUDelta/ce-engines',
   documentation: 'README.md'
@@ -28,7 +28,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use(['ecmascript', 'tinytest', 'erasaur:meteor-lodash', 'random']);
-  api.use('aspin:location-engine');
+  api.use('collectiveexperiences:location-engine');
 
   api.addFiles('tests/location-manager-client-tests.js', 'client');
   api.addFiles(['tests/location-manager-server-fixtures.js',
