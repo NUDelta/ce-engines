@@ -1,6 +1,6 @@
 CerebroClient = class CerebroClient {
   constructor() {
-    this.NOTIFY_METHOD = this.EMAIL;
+    this.NOTIFY_METHOD = this.PUSH;
   }
 
   // TODO: move this to CerebroCore and extend classes

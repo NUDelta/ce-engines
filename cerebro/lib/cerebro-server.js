@@ -9,7 +9,7 @@ let auth = {
 CerebroServer = class CerebroServer {
   constructor() {
     this.NOTIFY_ALL = false;
-    this.NOTIFY_METHOD = this.EMAIL;
+    this.NOTIFY_METHOD = this.PUSH;
   }
 
   static get EMAIL() {
@@ -23,7 +23,12 @@ CerebroServer = class CerebroServer {
   notify(users, server, subject, text) {
     switch(this.NOTIFY_METHOD) {
       case this.EMAIL:
+        console.log('SENDING EMAIL');
         this._sendEmails(users, server, subject, text);
+        break;
+      case this.PUSH:
+        console.log('SENIDNG PUSH');
+        this._sendPush(users, server, subject, text);
         break;
       default:
         console.log('[CEREBRO-SERVER] Invalid notification method was set.');
@@ -43,8 +48,8 @@ CerebroServer = class CerebroServer {
     });
   }
 
-  _sendPush(users, servers, subject, text) {
-    // TODO: implement me
+  _sendPush(users, server, subject, text) {
+    Meteor.call('serverNotification', text, subject, users);
   }
 
   liveQuery(locationType, options = {}) {

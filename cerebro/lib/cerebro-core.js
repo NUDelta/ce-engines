@@ -7,22 +7,21 @@ if (Meteor.isServer) {
       // TODO: refactor these together
       let experience = Experiences.findOne(experienceId);
       let atLocation = Cerebro.liveQuery(experience.location),
-        query = {
-          'profile.subscriptions': experienceId,
-          _id: { $in: atLocation }
-        };
+      query = {
+        'profile.subscriptions': experienceId,
+        _id: { $in: atLocation }
+      };
 
       if (Cerebro.NOTIFY_ALL) {
         delete query.profile;
       }
       let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
-
       Cerebro.notify(users, this, subject, text);
     },
     scheduleNotifications: function(experienceId, subject, schedule) {
       let n = 0,
-          server = this,
-          usersReached = [],
+      server = this,
+      usersReached = [],
           experience = Experiences.findOne(experienceId), // this line is not safe for the package
           name = `Notifying users for experience ${experienceId}`;
 
@@ -45,10 +44,10 @@ if (Meteor.isServer) {
 
           let atLocation = Cerebro.liveQuery(experience.location);
           let newlyAtLocation = _.difference(atLocation, usersReached),
-              query = {
-                'profile.subscriptions': experienceId,
-                _id: { $in: newlyAtLocation }
-              };
+          query = {
+            'profile.subscriptions': experienceId,
+            _id: { $in: newlyAtLocation }
+          };
 
           if (Cerebro.NOTIFY_ALL) {
             delete query.profile;
@@ -63,8 +62,8 @@ if (Meteor.isServer) {
           return n;
         }
       })
-    }
-  });
+}
+});
   SyncedCron.stop();
   SyncedCron.start();
 }
