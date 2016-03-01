@@ -73,6 +73,7 @@ CerebroServer = class CerebroServer {
   _yelpQuery(locationType, location='Evanston+IL', radius=200, limit=5) {
     // TODO: refactor this
     // TODO: add support for *any* location
+    // TODO: might want to unblock this
     let params = _.clone(auth);
     params.category_filter = locationType;
 
