@@ -21,12 +21,13 @@ CerebroServer = class CerebroServer {
   }
 
   notify(users, server, subject, text) {
+    // this needs refactoring into cerebro base
     switch(this.NOTIFY_METHOD) {
-      case this.EMAIL:
+      case CerebroServer.EMAIL:
         console.log('SENDING EMAIL');
         this._sendEmails(users, server, subject, text);
         break;
-      case this.PUSH:
+      case CerebroServer.PUSH:
         console.log('SENIDNG PUSH');
         this._sendPush(users, server, subject, text);
         break;

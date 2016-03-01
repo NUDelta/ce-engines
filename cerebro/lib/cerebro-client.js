@@ -36,7 +36,7 @@ CerebroClient = class CerebroClient {
 
   setNotificationMethod(method) {
     this.NOTIFY_METHOD = method;
-    Meteor.call('setNotificaitonMethod', method, (error, result) => {
+    Meteor.call('setNotificationMethod', method, (error, result) => {
       if (error) {
         console.log('error', error);
       } else {

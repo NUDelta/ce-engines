@@ -18,7 +18,7 @@ if (Meteor.isServer) {
       } else {
         console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name}. No location detected, so notifying everyone.`);
         query = {
-          'profile.subscriptions': experienceId,
+          'profile.subscriptions': experienceId
         };
       }
 
