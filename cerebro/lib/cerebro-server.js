@@ -44,7 +44,7 @@ CerebroServer = class CerebroServer {
         to: user.emails[0].address,
         from: 'shannonnachreiner2012@u.northwestern.edu',
         subject: subject,
-        text: text
+        html: text
       });
     });
   }
