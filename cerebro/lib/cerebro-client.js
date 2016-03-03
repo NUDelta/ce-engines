@@ -1,15 +1,6 @@
-CerebroClient = class CerebroClient {
+CerebroClient = class CerebroClient extends CerebroCore {
   constructor() {
-    this.NOTIFY_METHOD = this.PUSH;
-  }
-
-  // TODO: move this to CerebroCore and extend classes
-  static get EMAIL() {
-    return 'EMAIL';
-  }
-
-  static get PUSH() {
-    return 'PUSH';
+    super();
   }
 
   notify(experienceId, subject, text) {
@@ -26,17 +17,6 @@ CerebroClient = class CerebroClient {
     let schedule = 'every 1 mins';
     // TODO: abstract this out to notification manager
     Meteor.call('scheduleNotifications', experienceId, subject, schedule, (error, result) => {
-      if (error) {
-        console.log('error', error);
-      } else {
-
-      }
-    });
-  }
-
-  setNotificationMethod(method) {
-    this.NOTIFY_METHOD = method;
-    Meteor.call('setNotificationMethod', method, (error, result) => {
       if (error) {
         console.log('error', error);
       } else {

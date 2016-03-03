@@ -6,29 +6,18 @@ let auth = {
   oauth_signature_method: "HMAC-SHA1"
 }, yelpEndpoint = 'http://api.yelp.com/v2/search';
 
-CerebroServer = class CerebroServer {
+CerebroServer = class CerebroServer extends CerebroCore {
   constructor() {
-    this.NOTIFY_ALL = false;
-    this.NOTIFY_METHOD = this.PUSH;
-  }
-
-  static get EMAIL() {
-    return 'EMAIL';
-  }
-
-  static get PUSH() {
-    return 'PUSH';
+    super();
   }
 
   notify(users, server, subject, text, experienceId) {
     // this needs refactoring into cerebro base
     switch(this.NOTIFY_METHOD) {
-      case CerebroServer.EMAIL:
-        console.log('SENDING EMAIL');
+      case CerebroCore.EMAIL:
         this._sendEmails(users, server, subject, text);
         break;
-      case CerebroServer.PUSH:
-        console.log('SENIDNG PUSH');
+      case CerebroCore.PUSH:
         this._sendPush(users, server, subject, text, experienceId);
         break;
       default:
@@ -38,8 +27,10 @@ CerebroServer = class CerebroServer {
   }
 
   _sendEmails(users, server, subject, text) {
+    console.log('[CEREBRO-SERVER] Sending emails.');
     server.unblock();
     users.forEach((user) => {
+      this._setActiveExperience(user._id, experienceId);
       Email.send({
         to: user.emails[0].address,
         from: 'shannonnachreiner2012@u.northwestern.edu',
@@ -50,16 +41,49 @@ CerebroServer = class CerebroServer {
   }
 
   _sendPush(users, server, subject, text, experienceId) {
-    // Notify subscribed users
-    var ids = users.map(function (obj) {
-      return obj._id;
+    console.log('[CEREBRO-SERVER] Sending push notifications.');
+    users.forEach((user) => {
+      this._setActiveExperience(user._id, experienceId);
+      Push.send({
+        from: 'push',
+        title: subject,
+        text: text,
+        badge: 1, // TODO: not sure what this is
+        sound: 'airhorn.caf',
+        payload: {
+          title: subject,
+          text: text,
+          historyId: 'result'
+        },
+        query: {
+          userId: user._id
+        }
+      });
+    })
+  }
+
+  _broadcastPush(subject, text) {
+    Push.send({
+      from: 'push',
+      title: subject,
+      text: text,
+      badge: 1,
+      sound: 'airhorn.caf',
+      payload: {
+        title: subject,
+        text: text,
+        historyId: 'result'
+      },
+      query: {
+        // this sends to all users
+      }
     });
-    ids.forEach(function (id) {
-      Meteor.call('setActiveExperience', id, experienceId);
-      Meteor.call('userNotification', text, subject, id);
-    });
-    // Notify everyone
-    // Meteor.call('serverNotification', text, subject);
+  }
+
+  _setActiveExperience(userId, experienceId) {
+    Meteor.users.update(userId,
+      { $set: { 'profile.activeExperience': experienceId } }
+    );
   }
 
   liveQuery(locationType, options = {}) {
