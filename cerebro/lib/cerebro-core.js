@@ -1,5 +1,8 @@
 if (Meteor.isServer) {
   Meteor.methods({
+    setActiveExperience: function(id, experience) {
+      Meteor.users.update({_id: id}, {$set: {'profile.activeExperience': experience}});
+    },
     serverNotification: function(text,title) {
       var badge = 1
       Push.send({
@@ -19,7 +22,6 @@ if (Meteor.isServer) {
             });
     },
     userNotification: function(text,title,userId) {
-      console.log("mama we made it");
       var badge = 1
       Push.send({
         from: 'push',
@@ -64,7 +66,7 @@ if (Meteor.isServer) {
       }
 
       let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }}).fetch();
-      Cerebro.notify(users, this, subject, text);
+      Cerebro.notify(users, this, subject, text, experienceId);
     },
     scheduleNotifications: function(experienceId, subject, schedule) {
       let n = 0,

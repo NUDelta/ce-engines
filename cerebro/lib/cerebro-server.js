@@ -20,7 +20,7 @@ CerebroServer = class CerebroServer {
     return 'PUSH';
   }
 
-  notify(users, server, subject, text) {
+  notify(users, server, subject, text, experienceId) {
     // this needs refactoring into cerebro base
     switch(this.NOTIFY_METHOD) {
       case CerebroServer.EMAIL:
@@ -29,7 +29,7 @@ CerebroServer = class CerebroServer {
         break;
       case CerebroServer.PUSH:
         console.log('SENIDNG PUSH');
-        this._sendPush(users, server, subject, text);
+        this._sendPush(users, server, subject, text, experienceId);
         break;
       default:
         console.log('[CEREBRO-SERVER] Invalid notification method was set.');
@@ -49,12 +49,13 @@ CerebroServer = class CerebroServer {
     });
   }
 
-  _sendPush(users, server, subject, text) {
+  _sendPush(users, server, subject, text, experienceId) {
     // Notify subscribed users
     var ids = users.map(function (obj) {
       return obj._id;
     });
     ids.forEach(function (id) {
+      Meteor.call('setActiveExperience', id, experienceId);
       Meteor.call('userNotification', text, subject, id);
     });
     // Notify everyone
