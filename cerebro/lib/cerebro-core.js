@@ -1,5 +1,42 @@
 if (Meteor.isServer) {
   Meteor.methods({
+    serverNotification: function(text,title) {
+      var badge = 1
+      Push.send({
+        from: 'push',
+        title: title,
+        text: text,
+        badge: badge,
+        sound: 'airhorn.caf',
+        payload: {
+          title: title,
+          text:text,
+          historyId: "result"
+        },
+        query: {
+                // this will send to all users
+              }
+            });
+    },
+    userNotification: function(text,title,userId) {
+      console.log("mama we made it");
+      var badge = 1
+      Push.send({
+        from: 'push',
+        title: title,
+        text: text,
+        badge: badge,
+        sound: 'airhorn.caf',
+        payload: {
+          title: title,
+          text: text,
+          historyId: "result"
+        },
+        query: {
+                userId: userId //this will send to a specific Meteor.user()._id
+              }
+            });
+    },
     setNotificationMethod: function(method) {
       Cerebro.NOTIFY_METHOD = method;
     },
@@ -7,7 +44,7 @@ if (Meteor.isServer) {
       // TODO: refactor these together
       // TODO: fix the source of experience locations
       let experience = Experiences.findOne(experienceId),
-          query;
+      query;
       if (experience.location) {
         console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
         let atLocation = Cerebro.liveQuery(experience.location);
@@ -26,7 +63,7 @@ if (Meteor.isServer) {
         delete query.profile;
       }
 
-      let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
+      let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }}).fetch();
       Cerebro.notify(users, this, subject, text);
     },
     scheduleNotifications: function(experienceId, subject, schedule) {
@@ -36,7 +73,7 @@ if (Meteor.isServer) {
           experience = Experiences.findOne(experienceId), // this line is not safe for the package
           name = `Notifying users for experience ${experienceId}`;
 
-      console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
+          console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
       // only allow one job per experienceId
       SyncedCron.remove(name);
       // TODO: Cron jobs aren't really the way to do this.

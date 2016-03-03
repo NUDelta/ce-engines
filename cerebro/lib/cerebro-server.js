@@ -50,7 +50,15 @@ CerebroServer = class CerebroServer {
   }
 
   _sendPush(users, server, subject, text) {
-    Meteor.call('serverNotification', text, subject, users);
+    // Notify subscribed users
+    var ids = users.map(function (obj) {
+      return obj._id;
+    });
+    ids.forEach(function (id) {
+      Meteor.call('userNotification', text, subject, id);
+    });
+    // Notify everyone
+    // Meteor.call('serverNotification', text, subject);
   }
 
   liveQuery(locationType, options = {}) {
