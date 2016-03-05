@@ -9,6 +9,8 @@ let auth = {
 CerebroServer = class CerebroServer extends CerebroCore {
   constructor() {
     super();
+    this.DEBUG_PUSH = false;
+    this.DEBUG_USERS = [];
   }
 
   notify(users, server, subject, text, experienceId) {
@@ -43,6 +45,9 @@ CerebroServer = class CerebroServer extends CerebroCore {
   _sendPush(users, server, subject, text, experienceId) {
     console.log('[CEREBRO-SERVER] Sending push notifications.');
     let userIds = _.map(users, user => user._id);
+    if (this.DEBUG_PUSH) {
+      userIds = this.DEBUG_USERS;
+    }
     Push.send({
       from: 'push',
       title: subject,

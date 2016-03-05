@@ -23,7 +23,8 @@ if (Meteor.isServer) {
       }
 
       if (Cerebro.NOTIFY_ALL) {
-        delete query.profile;
+        console.log('[CEREBRO-CORE] Debug enabled. Ignoring user subscriptions.');
+        delete query['profile.subscriptions'];
       }
 
       let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }}).fetch();
