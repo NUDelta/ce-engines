@@ -42,23 +42,25 @@ CerebroServer = class CerebroServer extends CerebroCore {
 
   _sendPush(users, server, subject, text, experienceId) {
     console.log('[CEREBRO-SERVER] Sending push notifications.');
-    users.forEach((user) => {
-      this._setActiveExperience(user._id, experienceId);
-      Push.send({
-        from: 'push',
+    let userIds = _.map(users, user => user._id);
+    Push.send({
+      from: 'push',
+      title: subject,
+      text: text,
+      badge: 1, // TODO: not sure what this is
+      sound: 'airhorn.caf',
+      payload: {
         title: subject,
         text: text,
-        badge: 1, // TODO: not sure what this is
-        sound: 'airhorn.caf',
-        payload: {
-          title: subject,
-          text: text,
-          historyId: 'result'
-        },
-        query: {
-          userId: user._id
-        }
-      });
+        historyId: 'result'
+      },
+      query: {
+        userId: { $in: userIds }
+      }
+    });
+
+    userIds.forEach((userId) => {
+      this._setActiveExperience(userId, experienceId);
     })
   }
 
