@@ -7,7 +7,7 @@ if (Meteor.isServer) {
       // TODO: refactor these together
       // TODO: fix the source of experience locations
       let experience = Experiences.findOne(experienceId),
-          query;
+      query;
       if (experience.location) {
         console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
         let atLocation = Cerebro.liveQuery(experience.location);
@@ -84,6 +84,6 @@ if (Meteor.isServer) {
       })
 }
 });
-  SyncedCron.stop();
-  SyncedCron.start();
+SyncedCron.stop();
+SyncedCron.start();
 }

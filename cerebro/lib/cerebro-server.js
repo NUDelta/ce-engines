@@ -32,7 +32,7 @@ CerebroServer = class CerebroServer extends CerebroCore {
     console.log('[CEREBRO-SERVER] Sending emails.');
     server.unblock();
     users.forEach((user) => {
-      this._setActiveExperience(user._id, experienceId);
+      this._addActiveExperience(user._id, experienceId);
       Email.send({
         to: user.emails[0].address,
         from: 'shannonnachreiner2012@u.northwestern.edu',
@@ -65,7 +65,7 @@ CerebroServer = class CerebroServer extends CerebroCore {
     });
 
     userIds.forEach((userId) => {
-      this._setActiveExperience(userId, experienceId);
+      this._addActiveExperience(userId, experienceId);
     })
   }
 
@@ -87,10 +87,8 @@ CerebroServer = class CerebroServer extends CerebroCore {
     });
   }
 
-  _setActiveExperience(userId, experienceId) {
-    Meteor.users.update(userId,
-      { $set: { 'profile.activeExperience': experienceId } }
-    );
+  _addActiveExperience(userId, experienceId) {
+    Meteor.users.update({_id: userId}, {$push: {'profile.activeExperiences': experienceId}}, {multi: true});
   }
 
   liveQuery(locationType, options = {}) {
