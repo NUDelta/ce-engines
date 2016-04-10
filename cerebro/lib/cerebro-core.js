@@ -11,4 +11,8 @@ CerebroCore = class CerebroCore {
   static get PUSH() {
     return 'PUSH';
   }
-}
+
+  setExperiences(collection) {
+    this.Experiences = collection;
+  }
+};

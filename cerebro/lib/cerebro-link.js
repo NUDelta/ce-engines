@@ -6,8 +6,11 @@ if (Meteor.isServer) {
     notify: function(experienceId, subject, text) {
       // TODO: refactor these together
       // TODO: fix the source of experience locations
-      let experience = Experiences.findOne(experienceId),
-      query;
+      let experience = Cerebro.Experiences.findOne(experienceId),
+          query;
+
+      subject = subject || experience.name;
+      text = text || experience.startText;
       if (experience.location) {
         console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
         let atLocation = Cerebro.liveQuery(experience.location);
@@ -30,14 +33,17 @@ if (Meteor.isServer) {
       let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }}).fetch();
       Cerebro.notify(users, this, subject, text, experienceId);
     },
-    scheduleNotifications: function(experienceId, subject, schedule) {
+    scheduleNotifications: function(experienceId, subject, text, schedule) {
       let n = 0,
-      server = this,
-      usersReached = [],
-          experience = Experiences.findOne(experienceId), // this line is not safe for the package
+          server = this,
+          usersReached = [],
+          experience = Cerebro.Experiences.findOne(experienceId), // this line is not safe for the package
           name = `Notifying users for experience ${experienceId}`;
 
-          console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
+      subject = subject || experience.name;
+      text = text || experience.startText;
+
+      console.log(`[CEREBRO-CORE] Notifying users for experience ${experience.name} in ${experience.location}`);
       // only allow one job per experienceId
       SyncedCron.remove(name);
       // TODO: Cron jobs aren't really the way to do this.
@@ -74,7 +80,7 @@ if (Meteor.isServer) {
           }
 
           let newUsers = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }});
-          Cerebro.notify(newUsers, server, subject, experience.startText);
+          Cerebro.notify(newUsers, server, subject, text);
           newUsers.forEach((user) => {
             usersReached.push(user._id);
           });
