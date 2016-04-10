@@ -3,12 +3,11 @@ Cerebro.EMAIL = CerebroCore.EMAIL;
 
 if (Meteor.isServer) {
   Meteor.methods({
-    notify: function(experienceId, subject, text) {
+    notify: function(experienceId, subject, text, appendIncident) {
       // TODO: refactor these together
       // TODO: fix the source of experience locations
       let experience = Cerebro.Experiences.findOne(experienceId),
           query;
-
       subject = subject || experience.name;
       text = text || experience.startText;
       if (experience.location) {
@@ -31,6 +30,10 @@ if (Meteor.isServer) {
       }
 
       let users = Meteor.users.find(query, { fields: { _id: 1, emails: 1 }}).fetch();
+      let userIds = _.map(users, user => user._id);
+      if (appendIncident) {
+        Meteor.users.update({_id: {$in: userIds}}, {$push: {'profile.pastIncidents': experience.activeIncident}}, {multi: true});
+      }
       Cerebro.notify(users, this, subject, text, experienceId);
     },
     scheduleNotifications: function(experienceId, subject, text, schedule) {

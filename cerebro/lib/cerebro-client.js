@@ -3,8 +3,9 @@ CerebroClient = class CerebroClient extends CerebroCore {
     super();
   }
 
-  notify(experienceId, subject, text) {
-    Meteor.call('notify', experienceId, subject, text, (error, result) => {
+  notify(experienceId, subject, text, appendIncident) {
+    console.log("Append incident: " + appendIncident);
+    Meteor.call('notify', experienceId, subject, text, appendIncident, (error, result) => {
       if (error) {
         console.log('error', error);
       } else {
