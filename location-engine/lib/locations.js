@@ -31,3 +31,9 @@ Locations.attachSchema(new SimpleSchema({
     max: 180
   }
 }));
+
+if (Meteor.isServer) {
+  Meteor.publish('locations', function() {
+    return Locations.find();
+  });
+}
