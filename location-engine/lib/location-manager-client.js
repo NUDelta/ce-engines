@@ -61,4 +61,15 @@ LocationManagerClient = class LocationManagerClient {
     }
     return Locations.find(query, { fields: { uid: 0 } }).fetch();
   }
+
+  updateUserLocation(location) {
+    if (Meteor.userId()) {
+      let location = Locations.findOne({uid: Meteor.userId()});
+      if (location) {
+        Locations.update(location._id, {$set: {lat: location.latitude, lng: location.longitude}});
+      } else {
+        Locations.insert({lat: location.latitude, lng: location.longitude});
+      }
+    }
+  }
 };
